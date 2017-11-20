@@ -1,0 +1,48 @@
+<script>
+  const PannableMixin = ((superClass) => class extends superClass {
+    
+    constructor() {
+      super();
+      
+      this._panning = {
+        isPanning: false,
+        startPanX: 0,
+        startPanY: 0,
+        netPanX: 0,
+        netPanY: 0
+      };
+      
+      this.addEventListener('mousedown', this._panningStart.bind(this));
+      this.addEventListener('mouseup', this._panningEnd.bind(this));
+      this.addEventListener('mousemove', this._pan.bind(this));
+    }
+      
+    _panningStart(e) {
+      this._panning.isPanning = true;
+      this._panning.startPanX = e.pageX;
+      this._panning.startPanY = e.pageY;
+    }
+    
+    _panningEnd(e) {
+      this._panning.isPanning = false;
+      this._panning.startPanX = 0;
+      this._panning.startPanY = 0;
+    }
+    
+    _pan(e) {
+      if(!this._panning.isPanning) {
+        return;
+      }
+      
+      // Pan
+      this._panning.netPanX += e.pageX - this._panning.startPanX;
+      this._panning.netPanY += e.pageY - this._panning.startPanY;
+      this.style.transform = `translate(${this._panning.netPanX}px, ${this._panning.netPanY}px)`;
+      
+      // Update starting position for next calculation
+      this._panning.startPanX = e.pageX;
+      this._panning.startPanY = e.pageY;
+    }
+    
+  });
+</script>
