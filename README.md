@@ -1,5 +1,7 @@
 # pannable-mixin
 
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/fs-webcomponents/pannable-mixin)
+
 Web Component mixin that makes elements pannable. By default it will add mouse
 event listeners to the element and apply a CSS transform to it whenever it's
 dragged. You can change the element that the tranform is applied to by calling
