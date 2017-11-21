@@ -5,6 +5,7 @@
       super();
       
       this._panning = {
+        element: this,
         isPanning: false,
         startPanX: 0,
         startPanY: 0,
@@ -15,6 +16,12 @@
       this.addEventListener('mousedown', this._panningStart.bind(this));
       this.addEventListener('mouseup', this._panningEnd.bind(this));
       this.addEventListener('mousemove', this._pan.bind(this));
+    }
+    
+    setPanningElement(element) {
+      if(element) {
+        this._panning.element = element;
+      }
     }
       
     _panningStart(e) {
@@ -37,7 +44,7 @@
       // Pan
       this._panning.netPanX += e.pageX - this._panning.startPanX;
       this._panning.netPanY += e.pageY - this._panning.startPanY;
-      this.style.transform = `translate(${this._panning.netPanX}px, ${this._panning.netPanY}px)`;
+      this._panning.element.style.transform = `translate(${this._panning.netPanX}px, ${this._panning.netPanY}px)`;
       
       // Update starting position for next calculation
       this._panning.startPanX = e.pageX;
