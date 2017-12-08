@@ -4,7 +4,7 @@
     constructor() {
       super();
       
-      this._panning = {
+      this._panningData = {
         element: this,
         isPanning: false,
         startPanX: 0,
@@ -15,40 +15,52 @@
       
       this.addEventListener('mousedown', this._panningStart.bind(this));
       this.addEventListener('mouseup', this._panningEnd.bind(this));
-      this.addEventListener('mousemove', this._pan.bind(this));
+      this.addEventListener('mousemove', this._panningEvent.bind(this));
     }
     
     setPanningElement(element) {
       if(element) {
-        this._panning.element = element;
+        this._panningData.element = element;
       }
+    }
+    
+    resetPanning() {
+      this._panningData.startPanX = 0;
+      this._panningData.startPanY = 0;
+      this._panningData.netPanX = 0;
+      this._panningData.netPanY = 0;
+      this._panElement();
+    }
+    
+    _panElement() {
+      this._panningData.element.style.transform = `translate(${this._panningData.netPanX}px, ${this._panningData.netPanY}px)`;
     }
       
     _panningStart(e) {
-      this._panning.isPanning = true;
-      this._panning.startPanX = e.pageX;
-      this._panning.startPanY = e.pageY;
+      this._panningData.isPanning = true;
+      this._panningData.startPanX = e.pageX;
+      this._panningData.startPanY = e.pageY;
     }
     
     _panningEnd(e) {
-      this._panning.isPanning = false;
-      this._panning.startPanX = 0;
-      this._panning.startPanY = 0;
+      this._panningData.isPanning = false;
+      this._panningData.startPanX = 0;
+      this._panningData.startPanY = 0;
     }
     
-    _pan(e) {
-      if(!this._panning.isPanning) {
+    _panningEvent(e) {
+      if(!this._panningData.isPanning) {
         return;
       }
       
       // Pan
-      this._panning.netPanX += e.pageX - this._panning.startPanX;
-      this._panning.netPanY += e.pageY - this._panning.startPanY;
-      this._panning.element.style.transform = `translate(${this._panning.netPanX}px, ${this._panning.netPanY}px)`;
+      this._panningData.netPanX += e.pageX - this._panningData.startPanX;
+      this._panningData.netPanY += e.pageY - this._panningData.startPanY;
+      this._panElement();
       
       // Update starting position for next calculation
-      this._panning.startPanX = e.pageX;
-      this._panning.startPanY = e.pageY;
+      this._panningData.startPanX = e.pageX;
+      this._panningData.startPanY = e.pageY;
     }
     
   });
